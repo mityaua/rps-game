@@ -152,7 +152,7 @@ onMounted(() => {
         <div class="text-6xl mb-12">{{ verdict }}</div>
 
         <!-- Again button -->
-        <button @click="resetRound" class="bg-pink-700 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-pink-500">
+        <button @click="resetRound" class="bg-sky-600 hover:bg-sky-700 ... text-lg py-2 px-4 rounded-lg transition-colors duration-300">
           Again
         </button>
       </div>
