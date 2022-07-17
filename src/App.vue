@@ -107,24 +107,24 @@ onMounted(() => {
 
     <main class="container mx-auto p-6 flex-1">
       <!-- Start screen -->
-      <div v-if="userChoice === null" class="flex items-center justify-center -mx-6">
+      <div v-if="userChoice === null" class="flex items-center justify-center flex-wrap gap-2">
         <button
           @click="play('rock')"
-          class="bg-white rounded-full shadow-lg w-64 p-12 mx-6 transition-colors duration-300 hover:bg-stone-500"
+          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-12 mx-6 transition-colors duration-300 hover:bg-stone-500"
         >
           <img src="./assets/images/rock.svg" alt="Rock" class="w-full h-full" />
         </button>
 
         <button
           @click="play('paper')"
-          class="bg-white rounded-full shadow-lg w-64 p-12 mx-6 transition-colors duration-300 hover:bg-cyan-200"
+          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-12 mx-6 transition-colors duration-300 hover:bg-cyan-200"
         >
           <img src="./assets/images/paper.svg" alt="Paper" class="w-full h-full" />
         </button>
 
         <button
           @click="play('scissors')"
-          class="bg-white rounded-full shadow-lg w-64 p-12 mx-6 transition-colors duration-300 hover:bg-lime-300"
+          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-12 mx-6 transition-colors duration-300 hover:bg-lime-300"
         >
           <img src="./assets/images/scissors.svg" alt="Scissors" class="w-full h-full" />
         </button>
