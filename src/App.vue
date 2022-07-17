@@ -81,10 +81,14 @@ const resetRound = (): void => {
   verdict.value = null;
 };
 
-const clearWinRate = (): void => {
+const clearStatistics = (): void => {
   wins.value = 0;
   losses.value = 0;
   draws.value = 0;
+
+  localStorage.removeItem("wins");
+  localStorage.removeItem("losses");
+  localStorage.removeItem("draws");
 };
 
 onMounted(() => {
@@ -106,25 +110,25 @@ onMounted(() => {
     </header>
 
     <main class="container mx-auto p-6 flex-1">
-      <!-- Start screen -->
-      <div v-if="userChoice === null" class="flex items-center justify-center flex-wrap gap-2">
+      <!-- Start screen with buttons -->
+      <div v-if="userChoice === null" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
         <button
           @click="play('rock')"
-          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-12 mx-6 transition-colors duration-300 hover:bg-stone-500"
+          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-stone-500"
         >
           <img src="./assets/images/rock.svg" alt="Rock" class="w-full h-full" />
         </button>
 
         <button
           @click="play('paper')"
-          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-12 mx-6 transition-colors duration-300 hover:bg-cyan-200"
+          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-cyan-200"
         >
           <img src="./assets/images/paper.svg" alt="Paper" class="w-full h-full" />
         </button>
 
         <button
           @click="play('scissors')"
-          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-12 mx-6 transition-colors duration-300 hover:bg-lime-300"
+          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-lime-300"
         >
           <img src="./assets/images/scissors.svg" alt="Scissors" class="w-full h-full" />
         </button>
@@ -134,19 +138,23 @@ onMounted(() => {
       <div v-else>
         <div class="text-3xl mb-4">
           <p>
-            You picked <span class="text-green-500">{{ userChoice }}</span>
+            You picked <span class="text-pink-700">{{ userChoice }}</span>
           </p>
         </div>
 
         <div class="text-3xl mb-4">
           <p>
-            Computer picked <span class="text-red-500">{{ computerChoice }}</span>
+            Computer picked <span class="text-blue-800">{{ computerChoice }}</span>
           </p>
         </div>
 
+        <!-- Verdict block -->
         <div class="text-6xl mb-12">{{ verdict }}</div>
 
-        <button @click="resetRound" class="bg-pink-700 text-lg py-2 px-4 transition-colors duration-300 hover:bg-pink-500">Again</button>
+        <!-- Again button -->
+        <button @click="resetRound" class="bg-pink-700 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-pink-500">
+          Again
+        </button>
       </div>
 
       <!-- Statistics -->
@@ -159,10 +167,10 @@ onMounted(() => {
         <p class="text-lg">Win rate: {{ Math.round(winsPercentage) }}%</p>
       </div>
 
-      <!-- Clear win rate button -->
+      <!-- Clear statistics button -->
       <div v-if="winsPercentage" class="mt-6 mb-6">
-        <button @click="clearWinRate" class="bg-gray-600 text-lg py-2 px-4 transition-colors duration-300 hover:bg-gray-500">
-          Clear win rate
+        <button @click="clearStatistics" class="bg-gray-600 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-gray-500">
+          Clear statistics
         </button>
       </div>
     </main>
