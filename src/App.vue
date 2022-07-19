@@ -89,6 +89,8 @@ const clearStatistics = (): void => {
   localStorage.removeItem("wins");
   localStorage.removeItem("losses");
   localStorage.removeItem("draws");
+
+  resetRound();
 };
 
 onMounted(() => {
@@ -152,7 +154,11 @@ onMounted(() => {
         <div class="text-6xl mb-12">{{ verdict }}</div>
 
         <!-- Again button -->
-        <button @click="resetRound" class="bg-pink-700 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-pink-500">
+        <button
+          @click="resetRound"
+          title="Or R on keyboard"
+          class="bg-pink-700 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-pink-500"
+        >
           Again
         </button>
       </div>
@@ -168,7 +174,7 @@ onMounted(() => {
       </div>
 
       <!-- Clear statistics button -->
-      <div v-if="winsPercentage" class="mt-6 mb-6">
+      <div v-if="wins || losses || draws" class="mt-6 mb-6">
         <button @click="clearStatistics" class="bg-gray-600 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-gray-500">
           Clear statistics
         </button>
