@@ -105,7 +105,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-gradient-to-t from-indigo-500 via-purple-500 to-pink-500 text-white text-center min-h-screen flex flex-col">
+  <div class="bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r text-white text-center min-h-screen flex flex-col">
     <!-- Header -->
     <header class="container mx-auto p-6">
       <h1 class="text-4xl font-bold">Rock, Paper, Scissors</h1>
@@ -113,72 +113,110 @@ onMounted(() => {
 
     <main class="container mx-auto p-6 flex-1">
       <!-- Start screen with buttons -->
-      <div v-if="userChoice === null" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
-        <button
-          @click="play('rock')"
-          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-stone-500"
-        >
-          <img src="./assets/images/rock.svg" alt="Rock" class="w-full h-full" />
-        </button>
+      <Transition name="slide-up" mode="out-in">
+        <div v-if="userChoice === null" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
+          <button
+            @click="play('rock')"
+            class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-stone-400"
+          >
+            <img src="./assets/images/rock.svg" alt="Rock" class="w-full h-full" />
+          </button>
 
-        <button
-          @click="play('paper')"
-          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-cyan-200"
-        >
-          <img src="./assets/images/paper.svg" alt="Paper" class="w-full h-full" />
-        </button>
+          <button
+            @click="play('paper')"
+            class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-cyan-200"
+          >
+            <img src="./assets/images/paper.svg" alt="Paper" class="w-full h-full" />
+          </button>
 
-        <button
-          @click="play('scissors')"
-          class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-lime-300"
-        >
-          <img src="./assets/images/scissors.svg" alt="Scissors" class="w-full h-full" />
-        </button>
-      </div>
-
-      <!-- Results -->
-      <div v-else>
-        <div class="text-3xl mb-4">
-          <p>
-            You picked <span class="text-pink-700">{{ userChoice }}</span>
-          </p>
+          <button
+            @click="play('scissors')"
+            class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-lime-300"
+          >
+            <img src="./assets/images/scissors.svg" alt="Scissors" class="w-full h-full" />
+          </button>
         </div>
 
-        <div class="text-3xl mb-4">
-          <p>
-            Computer picked <span class="text-blue-800">{{ computerChoice }}</span>
-          </p>
+        <!-- Results -->
+        <div v-else>
+          <div class="text-3xl mb-4">
+            <p>
+              You picked <span class="text-slate-400 font-semibold">{{ userChoice }}</span>
+            </p>
+          </div>
+
+          <div class="text-3xl mb-4">
+            <p>
+              Computer picked <span class="text-slate-400 font-semibold">{{ computerChoice }}</span>
+            </p>
+          </div>
+
+          <!-- Verdict block -->
+          <div
+            class="text-6xl mb-12"
+            :class="{
+              'text-green-300': verdict === 'You win!',
+              'text-red-300': verdict === 'You lose!',
+              'text-yellow-300': verdict === 'Draw!',
+            }"
+          >
+            {{ verdict }}
+          </div>
+
+          <!-- Again button -->
+          <button
+            @click="resetRound"
+            title="Or R on keyboard"
+            class="bg-gray-600 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-gray-500"
+          >
+            Again
+          </button>
         </div>
-
-        <!-- Verdict block -->
-        <div class="text-6xl mb-12">{{ verdict }}</div>
-
-        <!-- Again button -->
-        <button
-          @click="resetRound"
-          title="Or R on keyboard"
-          class="bg-pink-700 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-pink-500"
-        >
-          Again
-        </button>
-      </div>
+      </Transition>
 
       <!-- Statistics -->
-      <div class="mt-12 mb-4">
-        <p class="text-3xl">{{ wins }} : {{ losses }} : {{ draws }}</p>
-      </div>
+      <Transition name="slide-up" mode="out-in">
+        <div v-if="wins || losses || draws">
+          <div class="mt-12 mb-4">
+            <p class="text-2xl">
+              <span class="text-green-300">Wins ({{ wins }})</span> : <span class="text-red-300">Losses ({{ losses }})</span> :
+              <span class="text-yellow-300">Draws ({{ draws }})</span>
+            </p>
+          </div>
 
-      <!-- Win rate block -->
-      <div>
-        <p class="text-lg">Win rate: {{ Math.round(winsPercentage) }}%</p>
-      </div>
+          <!-- Win rate block -->
+          <div>
+            <p class="text-lg">Win rate: {{ Math.round(winsPercentage) }}%</p>
+          </div>
 
-      <!-- Clear statistics button -->
-      <div v-if="wins || losses || draws" class="mt-6 mb-6">
-        <button @click="clearStatistics" class="bg-gray-600 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-gray-500">
-          Clear statistics
-        </button>
-      </div>
+          <!-- Clear statistics button -->
+          <div class="mt-6 mb-6">
+            <button
+              @click="clearStatistics"
+              class="bg-gray-600 hover:bg-red-500 opacity-70 hover:opacity-100 text-lg py-2 px-4 rounded-lg transition-colors duration-300"
+            >
+              Clear statistics
+            </button>
+          </div>
+        </div>
+      </Transition>
     </main>
   </div>
 </template>
+
+<style>
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.15s ease-out;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+</style>
