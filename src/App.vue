@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { ref, Ref, computed, ComputedRef, onMounted } from "vue";
-import { Outcomes, OutcomesItem } from "./interfaces/Outcomes";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { Choice, ChoicesVariants } from "./interfaces/Outcomes";
+import Page from "./components/Page.vue";
+import Container from "./components/Container.vue";
+import Header from "./components/Header.vue";
+import ChoiceButton from "./components/ChoiceButton.vue";
+import PickedChoice from "./components/PickedChoice.vue";
+import Verdict from "./components/Verdict.vue";
+import Statistics from "./components/Statistics.vue";
+import WinRate from "./components/WinRate.vue";
+import BaseButton from "./components/BaseButton.vue";
 
 // Stats values
-const wins: Ref<number> = ref(0);
-const losses: Ref<number> = ref(0);
-const draws: Ref<number> = ref(0);
+const wins = ref<number>(0);
+const losses = ref<number>(0);
+const draws = ref<number>(0);
 
-const userChoice: Ref<string | null> = ref(null);
-const computerChoice: Ref<string | null> = ref(null);
+const userChoice = ref<string | null>(null);
+const computerChoice = ref<string | null>(null);
 
-const verdict: Ref<string | null> = ref(null);
+const verdict = ref<string | null>(null);
 
-const outcomes: Outcomes = {
+const outcomes: ChoicesVariants = {
   rock: {
     rock: "draw",
     paper: "lose",
@@ -31,7 +40,7 @@ const outcomes: Outcomes = {
 };
 
 // Wins statistics
-const winsPercentage: ComputedRef<number> = computed(() => {
+const winsPercentage = computed<number>(() => {
   const total = wins.value + losses.value + draws.value;
   return total ? (wins.value / total) * 100 : 0;
 });
@@ -40,20 +49,23 @@ const winsPercentage: ComputedRef<number> = computed(() => {
 const play = (choice: string): void => {
   userChoice.value = choice;
 
-  const choises = ["rock", "paper", "scissors"];
-  const random = Math.floor(Math.random() * choises.length);
-  computerChoice.value = choises[random];
+  const choicesArray = ["rock", "paper", "scissors"];
+  const random = Math.floor(Math.random() * choicesArray.length);
+  computerChoice.value = choicesArray[random];
 
-  const outcome = outcomes[choice as keyof Outcomes][computerChoice.value as keyof OutcomesItem];
+  const choiceKey = choice as keyof Choice;
+  const computerChoiceKey = computerChoice.value as keyof ChoicesVariants;
+
+  const outcome = outcomes[choiceKey][computerChoiceKey];
 
   if (outcome === "win") {
-    wins.value++;
+    wins.value += 1;
     verdict.value = "You win!";
   } else if (outcome === "lose") {
-    losses.value++;
+    losses.value += 1;
     verdict.value = "You lose!";
   } else {
-    draws.value++;
+    draws.value += 1;
     verdict.value = "Draw!";
   }
 
@@ -93,115 +105,65 @@ const clearStatistics = (): void => {
   resetRound();
 };
 
+const keypressHandler = (event: KeyboardEvent) => {
+  if (event.key === "r") {
+    resetRound();
+  }
+};
+
 onMounted(() => {
   loadGame();
 
-  window.addEventListener("keypress", (event: KeyboardEvent) => {
-    if (event.key === "r") {
-      resetRound();
-    }
-  });
+  window.addEventListener("keypress", keypressHandler);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("keypress", keypressHandler);
 });
 </script>
 
 <template>
-  <div class="bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r text-white text-center min-h-screen flex flex-col">
-    <!-- Header -->
-    <header class="container mx-auto p-6">
-      <h1 class="text-4xl font-bold">Rock, Paper, Scissors</h1>
-    </header>
+  <Page>
+    <Header />
 
-    <main class="container mx-auto p-6 flex-1">
+    <Container>
       <!-- Start screen with buttons -->
       <Transition name="slide-up" mode="out-in">
-        <div v-if="userChoice === null" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
-          <button
-            @click="play('rock')"
-            class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-stone-400"
-          >
-            <img src="./assets/images/rock.svg" alt="Rock" class="w-full h-full" />
-          </button>
+        <div v-if="!userChoice" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
+          <ChoiceButton choice="rock" @choice="play" />
 
-          <button
-            @click="play('paper')"
-            class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-cyan-200"
-          >
-            <img src="./assets/images/paper.svg" alt="Paper" class="w-full h-full" />
-          </button>
+          <ChoiceButton choice="paper" @choice="play" />
 
-          <button
-            @click="play('scissors')"
-            class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-64 p-4 md:p-10 transition-colors duration-300 hover:bg-lime-300"
-          >
-            <img src="./assets/images/scissors.svg" alt="Scissors" class="w-full h-full" />
-          </button>
+          <ChoiceButton choice="scissors" @choice="play" />
         </div>
 
         <!-- Results -->
         <div v-else>
-          <div class="text-3xl mb-4">
-            <p>
-              You picked <span class="text-slate-400 font-semibold">{{ userChoice }}</span>
-            </p>
+          <div class="mb-8">
+            <PickedChoice label="You picked" :choice="userChoice" />
+            <PickedChoice label="Computer picked" :choice="computerChoice" />
           </div>
 
-          <div class="text-3xl mb-4">
-            <p>
-              Computer picked <span class="text-slate-400 font-semibold">{{ computerChoice }}</span>
-            </p>
-          </div>
+          <Verdict class="mb-8" :verdict="verdict" />
 
-          <!-- Verdict block -->
-          <div
-            class="text-6xl mb-12"
-            :class="{
-              'text-green-300': verdict === 'You win!',
-              'text-red-300': verdict === 'You lose!',
-              'text-yellow-300': verdict === 'Draw!',
-            }"
-          >
-            {{ verdict }}
-          </div>
-
-          <!-- Again button -->
-          <button
-            @click="resetRound"
-            title="Or R on keyboard"
-            class="bg-gray-600 text-lg py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-gray-500"
-          >
-            Again
-          </button>
+          <BaseButton label="Again" title="Or R on keyboard" @click="resetRound" />
         </div>
       </Transition>
 
       <!-- Statistics -->
       <Transition name="slide-up" mode="out-in">
         <div v-if="wins || losses || draws">
-          <div class="mt-12 mb-4">
-            <p class="text-2xl">
-              <span class="text-green-300">Wins ({{ wins }})</span> : <span class="text-red-300">Losses ({{ losses }})</span> :
-              <span class="text-yellow-300">Draws ({{ draws }})</span>
-            </p>
-          </div>
+          <Statistics class="mt-8 mb-4" :draws="draws" :losses="losses" :wins="wins" />
 
           <!-- Win rate block -->
-          <div>
-            <p class="text-lg">Win rate: {{ Math.round(winsPercentage) }}%</p>
-          </div>
+          <WinRate :rate="winsPercentage" />
 
           <!-- Clear statistics button -->
-          <div class="mt-6 mb-6">
-            <button
-              @click="clearStatistics"
-              class="bg-gray-600 hover:bg-red-500 opacity-70 hover:opacity-100 text-lg py-2 px-4 rounded-lg transition-colors duration-300"
-            >
-              Clear statistics
-            </button>
-          </div>
+          <BaseButton isRed class="mt-6 mb-6" label="Clear statistics" @click="clearStatistics" />
         </div>
       </Transition>
-    </main>
-  </div>
+    </Container>
+  </Page>
 </template>
 
 <style>

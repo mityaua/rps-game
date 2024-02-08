@@ -1,11 +1,11 @@
-export interface OutcomesItem {
+export interface Choice {
   rock: string;
   paper: string;
   scissors: string;
 }
 
-export interface Outcomes {
-  rock: OutcomesItem;
-  paper: OutcomesItem;
-  scissors: OutcomesItem;
+export interface ChoicesVariants {
+  rock: Choice;
+  paper: Choice;
+  scissors: Choice;
 }
