@@ -1,9 +1,10 @@
 <template>
   <button
-    class="bg-white rounded-full shadow-lg w-32 md:w-48 lg:w-60 p-4 md:p-10 transition-colors duration-300 hover:bg-stone-400"
+    class="bg-white rounded-full shadow-lg w-32 h-32 md:w-48 md:h-48 lg:w-60 lg:h-60 p-7 md:p-10 transition-colors duration-300 hover:bg-stone-400"
     @click="onClick"
   >
     <img :src="imageUrl" :alt="choice" class="w-full h-full" />
+    <p class="capitalize text-slate-600 font-semibold">{{ choice }}</p>
   </button>
 </template>
 
