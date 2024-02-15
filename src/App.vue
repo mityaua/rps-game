@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { Choice, ChoicesVariants } from "./interfaces/Outcomes";
+import Choice from "./interfaces/Choice";
+import ChoicesVariants from "./interfaces/ChoicesVariants";
 import Page from "./components/Page.vue";
 import Container from "./components/Container.vue";
 import Header from "./components/Header.vue";
