@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import draggable from "vuedraggable";
 import Choice from "@/interfaces/Choice";
 import ChoicesVariants from "@/interfaces/ChoicesVariants";
 import { Action } from "@/enums/Action";
@@ -18,6 +19,8 @@ import BaseButton from "@/components/BaseButton.vue";
 const wins = ref<number>(0);
 const losses = ref<number>(0);
 const draws = ref<number>(0);
+
+const choicesArray = ref([Action.Rock, Action.Paper, Action.Scissors]);
 
 const userChoice = ref<string | null>(null);
 const computerChoice = ref<string | null>(null);
@@ -52,9 +55,8 @@ const winsPercentage = computed<number>(() => {
 const play = (choice: string): void => {
   userChoice.value = choice;
 
-  const choicesArray: Action[] = [Action.Rock, Action.Paper, Action.Scissors];
-  const random: number = Math.floor(Math.random() * choicesArray.length);
-  computerChoice.value = choicesArray[random];
+  const random: number = Math.floor(Math.random() * choicesArray.value.length);
+  computerChoice.value = choicesArray.value[random];
 
   const choiceKey = choice as keyof Choice;
   const computerChoiceKey = computerChoice.value as keyof ChoicesVariants;
@@ -132,12 +134,12 @@ onUnmounted(() => {
     <Container>
       <!-- Start screen with buttons -->
       <Transition name="slide-up" mode="out-in">
-        <div v-if="!userChoice" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
-          <ChoiceButton :choice="Action.Rock" @choice="play" />
-
-          <ChoiceButton :choice="Action.Paper" @choice="play" />
-
-          <ChoiceButton :choice="Action.Scissors" @choice="play" />
+        <div v-if="!userChoice">
+          <draggable :list="choicesArray" item-key="choice" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
+            <template #item="{ element: choice }">
+              <ChoiceButton :choice="choice" :key="choice" @choice="play" />
+            </template>
+          </draggable>
         </div>
 
         <!-- Results -->
