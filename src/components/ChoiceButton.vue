@@ -10,9 +10,10 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import rockSvg from "../assets/images/rock.svg";
-import paperSvg from "../assets/images/paper.svg";
-import scissorsSvg from "../assets/images/scissors.svg";
+import { Action } from "@/enums/Action";
+import rockSvg from "@/assets/images/rock.svg";
+import paperSvg from "@/assets/images/paper.svg";
+import scissorsSvg from "@/assets/images/scissors.svg";
 
 const props = defineProps<{
   choice: string;
@@ -26,13 +27,13 @@ const imageUrl = computed<string>(() => {
   let url = "";
 
   switch (props.choice) {
-    case "rock":
+    case Action.Rock:
       url = rockSvg;
       break;
-    case "paper":
+    case Action.Paper:
       url = paperSvg;
       break;
-    case "scissors":
+    case Action.Scissors:
       url = scissorsSvg;
       break;
   }

@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import Choice from "./interfaces/Choice";
-import ChoicesVariants from "./interfaces/ChoicesVariants";
-import Page from "./components/Page.vue";
-import Container from "./components/Container.vue";
-import Header from "./components/Header.vue";
-import ChoiceButton from "./components/ChoiceButton.vue";
-import PickedChoice from "./components/PickedChoice.vue";
-import Verdict from "./components/Verdict.vue";
-import Statistics from "./components/Statistics.vue";
-import WinRate from "./components/WinRate.vue";
-import BaseButton from "./components/BaseButton.vue";
+import Choice from "@/interfaces/Choice";
+import ChoicesVariants from "@/interfaces/ChoicesVariants";
+import { Action } from "@/enums/Action";
+import { Results } from "@/enums/Results";
+import Page from "@/components/Page.vue";
+import Container from "@/components/Container.vue";
+import Header from "@/components/Header.vue";
+import ChoiceButton from "@/components/ChoiceButton.vue";
+import PickedChoice from "@/components/PickedChoice.vue";
+import Verdict from "@/components/Verdict.vue";
+import Statistics from "@/components/Statistics.vue";
+import WinRate from "@/components/WinRate.vue";
+import BaseButton from "@/components/BaseButton.vue";
 
 // Stats values
 const wins = ref<number>(0);
@@ -24,19 +26,19 @@ const verdict = ref<string | null>(null);
 
 const outcomes: ChoicesVariants = {
   rock: {
-    rock: "draw",
-    paper: "lose",
-    scissors: "win",
+    rock: Results.Draw,
+    paper: Results.Lose,
+    scissors: Results.Win,
   },
   paper: {
-    rock: "win",
-    paper: "draw",
-    scissors: "lose",
+    rock: Results.Win,
+    paper: Results.Draw,
+    scissors: Results.Lose,
   },
   scissors: {
-    rock: "lose",
-    paper: "win",
-    scissors: "draw",
+    rock: Results.Lose,
+    paper: Results.Win,
+    scissors: Results.Draw,
   },
 };
 
@@ -50,8 +52,8 @@ const winsPercentage = computed<number>(() => {
 const play = (choice: string): void => {
   userChoice.value = choice;
 
-  const choicesArray = ["rock", "paper", "scissors"];
-  const random = Math.floor(Math.random() * choicesArray.length);
+  const choicesArray: Action[] = [Action.Rock, Action.Paper, Action.Scissors];
+  const random: number = Math.floor(Math.random() * choicesArray.length);
   computerChoice.value = choicesArray[random];
 
   const choiceKey = choice as keyof Choice;
@@ -59,10 +61,10 @@ const play = (choice: string): void => {
 
   const outcome = outcomes[choiceKey][computerChoiceKey];
 
-  if (outcome === "win") {
+  if (outcome === Results.Win) {
     wins.value += 1;
     verdict.value = "You win!";
-  } else if (outcome === "lose") {
+  } else if (outcome === Results.Lose) {
     losses.value += 1;
     verdict.value = "You lose!";
   } else {
@@ -131,11 +133,11 @@ onUnmounted(() => {
       <!-- Start screen with buttons -->
       <Transition name="slide-up" mode="out-in">
         <div v-if="!userChoice" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
-          <ChoiceButton choice="rock" @choice="play" />
+          <ChoiceButton :choice="Action.Rock" @choice="play" />
 
-          <ChoiceButton choice="paper" @choice="play" />
+          <ChoiceButton :choice="Action.Paper" @choice="play" />
 
-          <ChoiceButton choice="scissors" @choice="play" />
+          <ChoiceButton :choice="Action.Scissors" @choice="play" />
         </div>
 
         <!-- Results -->
