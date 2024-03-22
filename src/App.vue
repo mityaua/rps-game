@@ -135,7 +135,13 @@ onUnmounted(() => {
       <!-- Start screen with buttons -->
       <Transition name="slide-up" mode="out-in">
         <div v-if="!userChoice">
-          <draggable :list="choicesArray" item-key="choice" class="flex items-center justify-center flex-wrap gap-4 md:gap-8">
+          <draggable
+            :list="choicesArray"
+            item-key="choice"
+            drag-class="drag"
+            ghost-class="ghost"
+            class="flex items-center justify-center flex-wrap gap-4 md:gap-8"
+          >
             <template #item="{ element: choice }">
               <ChoiceButton :choice="choice" :key="choice" @choice="play" />
             </template>
