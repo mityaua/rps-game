@@ -1,13 +1,13 @@
 <template>
-  <button>
-    <div
-      class="bg-white rounded-full shadow-lg w-32 h-32 md:w-48 md:h-48 lg:w-60 lg:h-60 p-7 md:p-10 transition-colors duration-300 hover:bg-stone-400"
-      @click="onClick"
-    >
-      <img :src="imageUrl" :alt="choice" class="w-full h-full" />
-      <p class="capitalize text-slate-600 font-semibold">{{ choice }}</p>
-    </div>
-  </button>
+	<button>
+		<div
+			class="h-32 w-32 rounded-full bg-white p-7 shadow-lg transition-colors duration-300 hover:bg-stone-400 md:h-48 md:w-48 md:p-10 lg:h-60 lg:w-60"
+			@click="onClick"
+		>
+			<img :src="imageUrl" :alt="choice" class="h-full w-full" />
+			<p class="font-semibold capitalize text-slate-600">{{ choice }}</p>
+		</div>
+	</button>
 </template>
 
 <script setup lang="ts">
@@ -18,46 +18,46 @@ import paperSvg from "@/assets/images/paper.svg";
 import scissorsSvg from "@/assets/images/scissors.svg";
 
 const props = defineProps<{
-  choice: string;
+	choice: string;
 }>();
 
 const emit = defineEmits<{
-  (e: "choice", value: string): void;
+	(e: "choice", value: string): void;
 }>();
 
 const imageUrl = computed<string>(() => {
-  let url = "";
+	let url = "";
 
-  switch (props.choice) {
-    case Action.Rock:
-      url = rockSvg;
-      break;
-    case Action.Paper:
-      url = paperSvg;
-      break;
-    case Action.Scissors:
-      url = scissorsSvg;
-      break;
-  }
+	switch (props.choice) {
+		case Action.Rock:
+			url = rockSvg;
+			break;
+		case Action.Paper:
+			url = paperSvg;
+			break;
+		case Action.Scissors:
+			url = scissorsSvg;
+			break;
+	}
 
-  return url;
+	return url;
 });
 
 const onClick = () => {
-  emit("choice", props.choice);
+	emit("choice", props.choice);
 };
 </script>
 
 <style lang="postcss" scoped>
 .drag > div {
-  @apply rotate-12;
+	@apply rotate-12;
 }
 
 .ghost {
-  @apply bg-slate-500 rounded-full;
+	@apply rounded-full bg-slate-500;
 }
 
 .ghost > div {
-  @apply invisible;
+	@apply invisible;
 }
 </style>

@@ -1,28 +1,31 @@
 {
-  "name": "rps-game",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite --open",
-    "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-  },
-  "dependencies": {
-    "vue": "^3.4.21",
-    "vuedraggable": "^4.1.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.28",
-    "@vitejs/plugin-vue": "^5.0.4",
-    "autoprefixer": "^10.4.18",
-    "gh-pages": "^6.1.1",
-    "postcss": "^8.4.36",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.4.2",
-    "vite": "^5.1.6",
-    "vue-tsc": "^2.0.6"
-  }
+	"name": "rps-game",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite --open",
+		"build": "vue-tsc --noEmit && vite build",
+		"preview": "vite preview",
+		"predeploy": "npm run build",
+		"format": "prettier --write src/",
+		"type-check": "vue-tsc --noEmit -p tsconfig.json --composite false",
+		"deploy": "gh-pages -d dist"
+	},
+	"dependencies": {
+		"vue": "^3.4.21",
+		"vuedraggable": "^4.1.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.12.4",
+		"@vitejs/plugin-vue": "^5.0.4",
+		"autoprefixer": "^10.4.19",
+		"gh-pages": "^6.1.1",
+		"postcss": "^8.4.38",
+		"prettier-plugin-tailwindcss": "^0.5.13",
+		"tailwindcss": "^3.4.3",
+		"typescript": "^5.4.4",
+		"vite": "^5.2.8",
+		"vue-tsc": "^2.0.10"
+	}
 }
