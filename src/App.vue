@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import draggable from "vuedraggable";
+import { VueDraggableNext } from "vue-draggable-next";
 import Choice from "@/interfaces/Choice";
 import ChoicesVariants from "@/interfaces/ChoicesVariants";
 import { Action } from "@/enums/Action";
@@ -135,17 +135,17 @@ onUnmounted(() => {
 			<!-- Start screen with buttons -->
 			<Transition name="slide-up" mode="out-in">
 				<div v-if="!userChoice">
-					<draggable
-						:list="choicesArray"
+					<vue-draggable-next
+						animation="100"
+						force-fallback="true"
 						item-key="choice"
 						drag-class="drag"
 						ghost-class="ghost"
 						class="flex flex-wrap items-center justify-center gap-4 md:gap-8"
+						v-model="choicesArray"
 					>
-						<template #item="{ element: choice }">
-							<ChoiceButton :choice="choice" :key="choice" @choice="play" />
-						</template>
-					</draggable>
+						<ChoiceButton v-for="choice in choicesArray" :choice="choice" :key="choice" @choice="play" />
+					</vue-draggable-next>
 				</div>
 
 				<!-- Results -->
