@@ -136,13 +136,13 @@ onUnmounted(() => {
 			<Transition name="slide-up" mode="out-in">
 				<div v-if="!userChoice">
 					<vue-draggable-next
+						v-model="choicesArray"
 						animation="100"
 						force-fallback="true"
 						item-key="choice"
 						drag-class="drag"
 						ghost-class="ghost"
 						class="flex flex-wrap items-center justify-center gap-4 md:gap-8"
-						v-model="choicesArray"
 					>
 						<ChoiceButton v-for="choice in choicesArray" :choice="choice" :key="choice" @choice="play" />
 					</vue-draggable-next>
@@ -170,7 +170,7 @@ onUnmounted(() => {
 					<WinRate :rate="winsPercentage" />
 
 					<!-- Clear statistics button -->
-					<BaseButton isRed class="mb-6 mt-6" label="Clear statistics" @click="clearStatistics" />
+					<BaseButton isRed label="Clear statistics" class="mb-6 mt-6" @click="clearStatistics" />
 				</div>
 			</Transition>
 		</Container>
