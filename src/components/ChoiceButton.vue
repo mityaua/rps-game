@@ -4,7 +4,7 @@
 			class="h-32 w-32 rounded-full bg-white p-7 shadow-lg transition-colors duration-300 hover:bg-stone-400 md:h-48 md:w-48 md:p-10 lg:h-60 lg:w-60"
 			@click="onClick"
 		>
-			<img :src="imageUrl" :alt="choice" class="h-full w-full" />
+			<img class="h-full w-full" :src="imageUrl" :alt="choice" />
 			<p class="font-semibold capitalize text-slate-600">{{ choice }}</p>
 		</div>
 	</button>
